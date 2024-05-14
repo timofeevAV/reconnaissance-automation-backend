@@ -9,6 +9,7 @@ __pycache__
 .eggs/
 .env
 .env.*
+!.env.*-sample
 .history
 .hypothesis/
 .idea/**/aws.xml
