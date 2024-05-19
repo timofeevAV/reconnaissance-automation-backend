@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import PointsList, PointDetails, PointPhotosList, PointPhotoDetails, DeletePhotos, PointSampleViewSet
+from .views import PointsList, PointDetails, PointPhotosList, PointPhotoDetails, DeletePhotos, PointSampleViewSet, TripsInBoundsView
 from rest_framework import routers
 
 router = routers.SimpleRouter()
@@ -16,6 +16,7 @@ urlpatterns = [
          name='get/patch/put/delete specific photo'),
     path('point/<int:pk>/delete-photos', DeletePhotos.as_view(),
          name='delete all point photos'),
+    path('trips-in-bounds/', TripsInBoundsView.as_view(),),
 ]
 
 urlpatterns += router.urls

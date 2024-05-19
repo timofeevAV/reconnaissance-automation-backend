@@ -78,20 +78,3 @@ def update_trip_updated_at(sender, instance, **kwargs):
 def update_trip_updated_at(sender, instance, **kwargs):
     instance.point.trip.updatedAt = timezone.now()
     instance.point.trip.save(update_fields=['updatedAt'])
-
-# django-cleanup does the same thing
-
-# @receiver(post_delete, sender=PointPhoto)
-# def auto_delete_file_on_delete(sender, instance, **kwargs):
-#     if instance.photo:
-#         if os.path.isfile(instance.photo.path):
-#             os.remove(instance.photo.path)
-
-
-# @receiver(pre_save, sender=PointPhoto)
-# def auto_delete_file_on_change(sender, instance, **kwargs):
-#     if instance.pk:
-#         old_instance = sender.objects.get(pk=instance.pk)
-#         if old_instance.photo and old_instance.photo != instance.photo:
-#             if os.path.isfile(old_instance.photo.path):
-#                 os.remove(old_instance.photo.path)

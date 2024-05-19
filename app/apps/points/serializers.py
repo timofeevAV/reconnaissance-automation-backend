@@ -29,3 +29,9 @@ class PointSampleSerializer(serializers.ModelSerializer):
     class Meta:
         model = PointSample
         fields = '__all__'
+        
+        
+class PointCoordsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Point
+        fields = ['id', 'latitude', 'longitude']

@@ -162,8 +162,8 @@ class TripDownloadView(views.APIView):
             row_cells[0].text = str(number + 1)
             row_cells[1].text = f'Широта: {point.latitude}, Долгота: {point.longitude}'
             row_cells[2].text = point.description or ''
-            cell_width = Cm(5)  # Adjust the width as needed
-            cell_height = Cm(5)  # Adjust the height as needed
+            cell_width = Cm(5)  
+            cell_height = Cm(5)
             self.add_photos_to_cell(
                 row_cells[3], point.photos.all(), cell_width, cell_height)
 

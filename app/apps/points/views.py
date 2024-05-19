@@ -5,7 +5,8 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from apps.trips.models import Trip
-
+from rest_framework.views import APIView
+from apps.trips.serializers import TripInBoundsSerializer
 
 class Pagination(PageNumberPagination):
     page_size = 10
@@ -85,3 +86,31 @@ class DeletePhotos(generics.DestroyAPIView):
 class PointSampleViewSet(viewsets.ModelViewSet):
     queryset = PointSample.objects.all()
     serializer_class = PointSampleSerializer
+
+class TripsInBoundsView(APIView):
+    def post(self, request, *args, **kwargs):
+        bounds = request.data
+        north_east = bounds.get('northEast', {})
+        south_west = bounds.get('southWest', {})
+
+        if not north_east or not south_west:
+            return Response({"error": "Invalid coordinates"}, status=status.HTTP_400_BAD_REQUEST)
+
+        north_east_lat = north_east.get('latitude')
+        north_east_lng = north_east.get('longitude')
+        south_west_lat = south_west.get('latitude')
+        south_west_lng = south_west.get('longitude')
+
+        if not all([north_east_lat, north_east_lng, south_west_lat, south_west_lng]):
+            return Response({"error": "Incomplete coordinates"}, status=status.HTTP_400_BAD_REQUEST)
+
+        trips_within_bounds = []
+
+        for trip in Trip.objects.all():
+            points = trip.points.exclude(latitude__isnull=True, longitude__isnull=True)
+            if all(south_west_lat <= point.latitude <= north_east_lat and
+                   south_west_lng <= point.longitude <= north_east_lng for point in points):
+                trips_within_bounds.append(trip)
+
+        serializer = TripInBoundsSerializer(trips_within_bounds, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
