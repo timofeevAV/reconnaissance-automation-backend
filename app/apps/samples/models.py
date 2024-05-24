@@ -2,7 +2,7 @@ from django.db import models
 
 class Characteristic(models.Model):
     name = models.CharField(max_length=128, unique=True)
-    expression = models.CharField(max_length=255, null=True, blank=False)
+    expression = models.CharField(max_length=255, null=True, blank=True)
 
 
 class Sample(models.Model):
